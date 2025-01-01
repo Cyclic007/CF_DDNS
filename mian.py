@@ -6,7 +6,6 @@ import requests
 import socket
 
 def get_ipv6_address():
-    """Gets the current IPv6 address of the machine."""
 
     s = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
     try:
@@ -36,6 +35,7 @@ if not(os.path.isfile(configfile_name)):
     config.set("debug","ipv4_Service", "http://ipinfo.io/ip")
     config.write(cfgfile)
     cfgfile.close()
+    exit()
 
 
 configur = configparser.ConfigParser()
@@ -48,6 +48,8 @@ zoneID = configur.get("DNSDeets","zoneID")
 ipv4Service = configur.get("debug","ipv4_Service")
 domainName = configur.get("DNSDeets","domainName")
 ipVersion = configur.get("DNSDeets","IP version(IPv4, IPv6 or both)")
+
+# gets and sets the IPv6 and AAAA record
 if ipVersion == "IPv6" or ipVersion == "both":
     ipv6 = get_ipv6_address()
     if ipv6:
@@ -74,8 +76,7 @@ if ipVersion == "IPv6" or ipVersion == "both":
             content=ipv6,
         )
 
-# print(email)
-# print(dnsRecordID)
+# gets and sets IPv4 and the A record
 if ipVersion == "IPv4" or ipVersion == "both":
     r = requests.get(ipv4Service)
     try:
